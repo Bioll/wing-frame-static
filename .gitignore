@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 生成的网格/几何/结果(可由脚本重生成)
+*.stp
+*.step
+*.inp
+*.msh
+
+# Abaqus 运行产物
+*.odb
+*.dat
+*.msg
+*.sta
+*.com
+*.prt
+*.sim
+*.lck
+*.env
+*.rpy
+*.rec
+*.023
+abaqus_acis.log
+
+# HyperMesh 产物
+command*.tcl
+hmmenu.set
+*_reader.msg
+exodus.msg
+
+# 临时日志
+*_out.txt
+*_log.txt
+
+# 但保留 results 里的展示图
+!results/*.png
