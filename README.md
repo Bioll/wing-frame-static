@@ -60,3 +60,27 @@ abaqus viewer noGUI=plot_results.py
 ```
 
 > 脚本里的路径是本地绝对路径（`C:/Users/Liu/...`），按需修改。输入 CAD `airfoil.stp` 未包含在仓库中。
+
+## 自研 C++ 有限元求解器（`cpp/`）
+
+一个**自包含、零依赖**的线弹性有限元求解器，4 节点四面体（C3D4）：
+组装 → Dirichlet 约束 → 预处理共轭梯度求解 → 输出 **VTK**（位移 + von Mises）给 ParaView。
+
+- `cpp/fem3d.cpp` — 求解器（单文件）。编译：`g++ -O2 -std=c++17 fem3d.cpp -o fem3d`
+- `cpp/make_cantilever.py` — 悬臂梁验证算例生成器
+- 输入为简单文本格式（NODES / ELEMENTS / MATERIAL / GRAVITY / FIX / NFORCE）
+
+**验证**（悬臂梁，对比理论解）：
+
+| 算例 | C++ FE | 理论 | 误差 |
+|---|---|---|---|
+| 轴向拉伸 `PL/(AE)` | 0.01433 mm | 0.01429 mm | **0.32%** ✓ |
+| 弯曲挠度 `PL³/(3EI)` | 2.90 mm | 5.71 mm | 偏刚 ~2×（线性四面体剪切自锁，加密/二阶可收敛） |
+
+轴向精确说明组装/求解/边界正确；弯曲偏刚是线性四面体的固有特性（与 Abaqus C3D4 一致）。
+
+```bash
+g++ -O2 -std=c++17 cpp/fem3d.cpp -o fem3d
+python cpp/make_cantilever.py axial cantilever.txt
+./fem3d cantilever.txt out.vtk        # -> ParaView 打开 out.vtk
+```

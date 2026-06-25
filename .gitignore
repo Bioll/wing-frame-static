@@ -37,3 +37,11 @@ exodus.msg
 
 # 但保留 results 里的展示图
 !results/*.png
+
+# C++ 编译器(便携) / 二进制 / 生成物
+w64devkit/
+*.exe
+*.o
+*.vtk
+cpp/*.txt
+w64devkit-*.7z.exe
